@@ -3,42 +3,19 @@ import Pagination from "react-js-pagination";
 import { Row, Table, Navbar, NavItem, Icon, Input } from "react-materialize";
 import logo from "../../logo.svg";
 import { getUserPosts, getPosts, getUsers } from "../actions/UserLogin";
+import Filter from "../post/Filter";
+import Item from "../post/Item";
 
 class List extends Component {
   constructor() {
     super();
     this.state = {
-      posts: [],
-      users: [],
-      filterText: "",
-      selectedUserId: "all"
+      posts: []
     };
   }
 
-  // componentWillMount() {
-  //   localStorage.getItem("posts") &&
-  //     this.setState({
-  //       posts: JSON.parse(localStorage.getItem("posts"))
-  //     });
-  // }
-
   componentDidMount() {
     this.fetchData();
-    //   if (!localStorage.getItem("posts")) {
-    //     this.fetchData();
-    //   } else {
-    //     console.log("Using data from localStorage");
-    //   }
-
-    getUsers()
-      .then(res => {
-        console.log("res", res);
-        this.setState({ users: res.data });
-      })
-      .catch(error => {
-        console.error("error", error.response.data.error);
-        this.setState({ errors: error.response.data.error });
-      });
   }
 
   fetchData() {
@@ -52,61 +29,10 @@ class List extends Component {
       });
   }
 
-  filterList = event => {
-    const { selectedUserId } = this.state;
-    const filterText = event.target.value;
-
-    {
-      selectedUserId == "all"
-        ? this.fetchAllPosts(filterText)
-        : this.fetchUserPosts(selectedUserId, filterText);
-    }
-  };
-
-  fetchAllPosts = filterText => {
-    getPosts()
-      .then(res => {
-        this.setState({
-          posts: res.data.filter(function(item) {
-            return (
-              item.title
-                .toString()
-                .toLowerCase()
-                .search(filterText.toLowerCase()) !== -1
-            );
-          })
-        });
-      })
-      .catch(error => {
-        console.error("error", error);
-        this.setState({ errors: error.response.data.error });
-      });
-  };
-
-  fetchUserPosts = (id, filterText) => {
-    getUserPosts(id)
-      .then(res => {
-        this.setState({
-          posts: res.data.filter(function(item) {
-            return (
-              item.title
-                .toString()
-                .toLowerCase()
-                .search(filterText.toLowerCase()) !== -1
-            );
-          })
-        });
-      })
-      .catch(error => {
-        console.error("error", error.response.data.error);
-        this.setState({ errors: error.response.data.error });
-      });
-  };
-
-  filterListByUserId = ({ target: { value } }) => {
-    this.setState({ selectedUserId: value });
-    const { filterText } = this.state;
-    this.fetchUserPosts(value, filterText);
+  updatePostList = posts => {
+    this.setState({
+      posts
+    });
   };
 
   render() {
@@ -114,29 +40,8 @@ class List extends Component {
       <React.Fragment>
         <h5>Posts</h5>
 
-        <Row>
-          <Input
-            s={6}
-            type="select"
-            icon="account_circle"
-            defaultValue="2"
-            onChange={this.filterListByUserId}
-          >
-            <option value="all">All user's posts</option>
-            {this.state.users.map(user => (
-              <option key={user.id} value={user.id}>
-                {user.name}
-              </option>
-            ))}
-          </Input>
+        <Filter updatePostList={this.updatePostList} />
 
-          <Input
-            s={6}
-            type="text"
-            placeholder="Search"
-            onChange={this.filterList}
-          />
-        </Row>
         <Row>
           <Table className="highlight">
             <thead>
@@ -147,12 +52,7 @@ class List extends Component {
             </thead>
 
             <tbody>
-              {this.state.posts.map(post => (
-                <tr key={post.id}>
-                  <td>{post.id}</td>
-                  <td>{post.title}</td>
-                </tr>
-              ))}
+              {this.state.posts.map(post => <Item key={post.id} post={post} />)}
             </tbody>
           </Table>
         </Row>
