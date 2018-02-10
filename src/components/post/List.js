@@ -2,60 +2,114 @@ import React, { Component } from "react";
 import Pagination from "react-js-pagination";
 import { Row, Table, Navbar, NavItem, Icon, Input } from "react-materialize";
 import logo from "../../logo.svg";
+import { getUserPosts, getPosts, getUsers } from "../actions/UserLogin";
 
 class List extends Component {
   constructor() {
     super();
     this.state = {
       posts: [],
-      activePage: 1
+      users: [],
+      filterText: "",
+      selectedUserId: "all"
     };
   }
 
-  handlePageChange = pageNumber => {
-    console.log(`active page is ${pageNumber}`);
-    this.setState({ activePage: pageNumber });
-  };
+  // componentWillMount() {
+  //   localStorage.getItem("posts") &&
+  //     this.setState({
+  //       posts: JSON.parse(localStorage.getItem("posts"))
+  //     });
+  // }
 
   componentDidMount() {
-    const users = [];
-    fetch("https://jsonplaceholder.typicode.com/posts")
-      .then(response => response.json())
-      .then(json => this.setState({ posts: json }))
-      .catch(err => {
-        console.log(err);
+    this.fetchData();
+    //   if (!localStorage.getItem("posts")) {
+    //     this.fetchData();
+    //   } else {
+    //     console.log("Using data from localStorage");
+    //   }
+
+    getUsers()
+      .then(res => {
+        console.log("res", res);
+        this.setState({ users: res.data });
+      })
+      .catch(error => {
+        console.error("error", error.response.data.error);
+        this.setState({ errors: error.response.data.error });
+      });
+  }
+
+  fetchData() {
+    getPosts()
+      .then(res => {
+        this.setState({ posts: res.data });
+      })
+      .catch(error => {
+        console.error("error", error.response.data.error);
+        this.setState({ errors: error.response.data.error });
       });
   }
 
   filterList = event => {
-    var postList = this.state.posts;
-    postList = postList.filter(function(item) {
-      return (
-        item.title
-          .toString()
-          .toLowerCase()
-          .search(event.target.value.toLowerCase()) !== -1
-      );
-    });
-    this.setState({ posts: postList });
+    const { selectedUserId } = this.state;
+    const filterText = event.target.value;
+
+    {
+      selectedUserId == "all"
+        ? this.fetchAllPosts(filterText)
+        : this.fetchUserPosts(selectedUserId, filterText);
+    }
   };
 
-  filterListByUserId = event => {
-    var postList = this.state.posts;
-    postList = postList.filter(function(item) {
-      return (
-        item.userId
-          .toString()
-          .toLowerCase()
-          .search(event.target.value.toLowerCase()) !== -1
-      );
-    });
-    this.setState({ posts: postList });
+  fetchAllPosts = filterText => {
+    getPosts()
+      .then(res => {
+        this.setState({
+          posts: res.data.filter(function(item) {
+            return (
+              item.title
+                .toString()
+                .toLowerCase()
+                .search(filterText.toLowerCase()) !== -1
+            );
+          })
+        });
+      })
+      .catch(error => {
+        console.error("error", error);
+        this.setState({ errors: error.response.data.error });
+      });
+  };
+
+  fetchUserPosts = (id, filterText) => {
+    getUserPosts(id)
+      .then(res => {
+        this.setState({
+          posts: res.data.filter(function(item) {
+            return (
+              item.title
+                .toString()
+                .toLowerCase()
+                .search(filterText.toLowerCase()) !== -1
+            );
+          })
+        });
+      })
+      .catch(error => {
+        console.error("error", error.response.data.error);
+        this.setState({ errors: error.response.data.error });
+      });
+  };
+
+  filterListByUserId = ({ target: { value } }) => {
+    this.setState({ selectedUserId: value });
+    const { filterText } = this.state;
+    this.fetchUserPosts(value, filterText);
   };
 
   render() {
-    let usersId = [...new Set(this.state.posts.map(item => item.userId))];
-
     return (
       <React.Fragment>
         <h5>Posts</h5>
@@ -68,9 +122,10 @@ class List extends Component {
             defaultValue="2"
             onChange={this.filterListByUserId}
           >
-            {usersId.map(userId => (
-              <option key={userId} value={userId}>
-                UserId {userId}
+            <option value="all">All user's posts</option>
+            {this.state.users.map(user => (
+              <option key={user.id} value={user.id}>
+                {user.name}
               </option>
             ))}
           </Input>
@@ -102,41 +157,33 @@ class List extends Component {
           </Table>
         </Row>
 
-        <ul class="pagination">
-          <li class="disabled">
+        <ul className="pagination center-align">
+          <li className="disabled">
             <a href="#!">
-              <i class="material-icons">chevron_left</i>
+              <i className="material-icons">chevron_left</i>
             </a>
           </li>
-          <li class="active">
+          <li className="active">
             <a href="#!">1</a>
           </li>
-          <li class="waves-effect">
+          <li className="waves-effect">
             <a href="#!">2</a>
           </li>
-          <li class="waves-effect">
+          <li className="waves-effect">
             <a href="#!">3</a>
           </li>
-          <li class="waves-effect">
+          <li className="waves-effect">
             <a href="#!">4</a>
           </li>
-          <li class="waves-effect">
+          <li className="waves-effect">
             <a href="#!">5</a>
           </li>
-          <li class="waves-effect">
+          <li className="waves-effect">
             <a href="#!">
-              <i class="material-icons">chevron_right</i>
+              <i className="material-icons">chevron_right</i>
             </a>
           </li>
         </ul>
-
-        {/* <Pagination
-          activePage={this.state.activePage}
-          itemsCountPerPage={10}
-          totalItemsCount={450}
-          pageRangeDisplayed={5}
-          onChange={this.handlePageChange}
-        /> */}
       </React.Fragment>
     );
   }
