@@ -55,7 +55,7 @@ class Filter extends Component {
     const { selectedUserId } = this.state;
     const filterText = event.target.value;
 
-    if (filterText.length >= 3) {
+    if (filterText.length >= 3 || filterText.length == 0) {
       this.setState({
         filterText
       });
