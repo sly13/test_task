@@ -54,14 +54,17 @@ class Filter extends Component {
   filterListByText = event => {
     const { selectedUserId } = this.state;
     const filterText = event.target.value;
-    this.setState({
-      filterText
-    });
 
-    {
-      selectedUserId == "all"
-        ? this.fetchAllPosts(filterText)
-        : this.fetchUserPosts(selectedUserId, filterText);
+    if (filterText.length >= 3) {
+      this.setState({
+        filterText
+      });
+
+      {
+        selectedUserId == "all"
+          ? this.fetchAllPosts(filterText)
+          : this.fetchUserPosts(selectedUserId, filterText);
+      }
     }
   };
 
