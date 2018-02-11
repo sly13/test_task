@@ -1,6 +1,5 @@
 import React from "react";
 
-import PropTypes from "prop-types";
 import { logout } from "../actions/UserLogin";
 import { withRouter } from "react-router-dom";
 
@@ -11,12 +10,8 @@ class Logout extends React.Component {
   }
 
   render() {
-    return <div />;
+    return null;
   }
 }
-
-Logout.propTypes = {
-  logout: PropTypes.func.isRequired
-};
 
 export default withRouter(Logout);

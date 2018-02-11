@@ -4,16 +4,14 @@ import Error from "../ui/Error";
 import { Row, Input, Icon, Button } from "react-materialize";
 
 class LoginForm extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hasErrors: false,
-      user: {
-        login: "test",
-        password: ""
-      }
-    };
-  }
+  // анатации
+  state = {
+    hasErrors: false,
+    user: {
+      login: "test",
+      password: ""
+    }
+  };
 
   handleSubmit = e => {
     e.preventDefault();
@@ -43,8 +41,14 @@ class LoginForm extends Component {
 
   validate(user) {
     const errors = {};
-    if (!user.login) errors.login = "Login can't be blank!";
-    if (!user.password) errors.password = "Password can't be blank!";
+    if (!user.login) {
+      errors.login = "Login is required.";
+    } else if (!user.password) {
+      errors.password = "Password is required.";
+    } else {
+      if (user.login !== "test" || user.password !== "test")
+        errors.something = "Wrong login or password.";
+    }
     return errors;
   }
 
@@ -64,7 +68,7 @@ class LoginForm extends Component {
               onChange={this.handleUpdate}
               label="Login"
               validate
-              required="required"
+              //required="required"
               autoComplete="off"
             >
               <Icon>account_circle</Icon>
@@ -80,7 +84,7 @@ class LoginForm extends Component {
               s={6}
               label="Password"
               className="validate"
-              required="required"
+              //required="required"
               autoComplete="off"
             >
               <Icon>lock_outline</Icon>
@@ -89,6 +93,14 @@ class LoginForm extends Component {
             {/* {hasErrors.password && (
               <Error text={hasErrors.password} for="password" />
             )} */}
+
+            <Row>
+              <div className="center-align error">
+                {this.state.hasErrors.login}
+                {this.state.hasErrors.password}
+                {this.state.hasErrors.something}
+              </div>
+            </Row>
 
             <Row className="center-align">
               <Button type="submit" waves="light">

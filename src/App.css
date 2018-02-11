@@ -43,3 +43,7 @@ nav,
 a {
     color: #26a69a;
 }
+
+.error {
+    color: #F44336
+}

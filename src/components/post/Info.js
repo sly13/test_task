@@ -3,14 +3,11 @@ import { getPostInfo } from "../actions/UserLogin";
 import { withRouter } from "react-router-dom";
 
 class Info extends Component {
-  constructor() {
-    super();
-    this.state = {
-      info: {}
-    };
-  }
+  state = {
+    info: {}
+  };
 
-  componentDidMount() {
+  componentWillMount() {
     getPostInfo(this.props.match.params.id)
       .then(res => {
         this.setState({ info: res.data });

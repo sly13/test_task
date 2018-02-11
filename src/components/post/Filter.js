@@ -12,7 +12,7 @@ class Filter extends Component {
     };
   }
 
-  componentDidMount() {
+  componentWillMount() {
     getUsers()
       .then(res => {
         this.setState({ users: res.data });
@@ -35,14 +35,13 @@ class Filter extends Component {
       getUserPosts(id)
         .then(res => {
           this.props.updatePostList(
-            res.data.filter(function(item) {
-              return (
+            res.data.filter(
+              item =>
                 item.title
                   .toString()
                   .toLowerCase()
                   .search(filterText.toLowerCase()) !== -1
-              );
-            })
+            )
           );
         })
         .catch(error => {
@@ -116,7 +115,7 @@ class Filter extends Component {
           autoComplete="off"
         />
 
-        <Input s={2} type="select" onChange={this.changePerPageCount}>
+        <Input s={2} type="select" onChange={this.changePerPageCount} value="10">
           <option value="5">5</option>
           <option value="10">10</option>
           <option value="15">15</option>

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import LoginPage from "../src/components/auth/LoginPage";
+import LoginForm from "../src/components/auth/LoginForm";
 import List from "../src/components/post/List";
 import Logout from "../src/components/user/Logout";
 import { Route, Switch, Link } from "react-router-dom";
@@ -30,7 +30,7 @@ class App extends Component {
 
         <div className="container">
           <Switch>
-            <Route exact path="/login" component={LoginPage} />
+            <Route exact path="/login" component={LoginForm} />
             <Route exact path="/list" component={List} />
             <Route exact path="/list/:id" component={Info} />
             <Route path="/logout" component={Logout} />
