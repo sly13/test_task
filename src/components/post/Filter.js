@@ -31,24 +31,27 @@ class Filter extends Component {
   };
 
   fetchUserPosts = (id, filterText) => {
-    console.log(id, filterText);
-    getUserPosts(id)
-      .then(res => {
-        this.props.updatePostList(
-          res.data.filter(function(item) {
-            return (
-              item.title
-                .toString()
-                .toLowerCase()
-                .search(filterText.toLowerCase()) !== -1
-            );
-          })
-        );
-      })
-      .catch(error => {
-        console.error("error", error);
-        this.setState({ errors: error.response.data.error });
-      });
+    if (id === "all") {
+      this.fetchAllPosts(filterText);
+    } else {
+      getUserPosts(id)
+        .then(res => {
+          this.props.updatePostList(
+            res.data.filter(function(item) {
+              return (
+                item.title
+                  .toString()
+                  .toLowerCase()
+                  .search(filterText.toLowerCase()) !== -1
+              );
+            })
+          );
+        })
+        .catch(error => {
+          console.error("error", error);
+          this.setState({ errors: error.response.data.error });
+        });
+    }
   };
 
   filterListByText = event => {

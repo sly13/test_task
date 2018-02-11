@@ -34,3 +34,12 @@
 #front-page-logo {
     padding-left: 20px;
 }
+
+nav,
+.pagination li.active {
+    background-color: #26a69a;
+}
+
+a {
+    color: #26a69a;
+}

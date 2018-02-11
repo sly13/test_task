@@ -17,3 +17,6 @@ export const getUsers = () => {
   return axios.get(`${packageJSON.apiUrl}/users`);
 };
 
+export const getPostInfo = id => {
+  return axios.get(`${packageJSON.apiUrl}/posts/${id}`);
+};

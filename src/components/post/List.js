@@ -10,9 +10,15 @@ class List extends Component {
   constructor() {
     super();
     this.state = {
-      posts: []
+      posts: [],
+      activePage: 1,
+      page: 1
     };
   }
+
+  handlePageChange = pageNumber => {
+    this.setState({ activePage: pageNumber, page: pageNumber });
+  };
 
   componentDidMount() {
     this.fetchData();
@@ -31,11 +37,18 @@ class List extends Component {
 
   updatePostList = posts => {
     this.setState({
-      posts
+      posts,
+      page: 1
     });
   };
 
   render() {
+    const per_page = 10;
+    const pages = Math.ceil(this.state.posts.length / per_page);
+    const current_page = this.state.page;
+    const start_offset = (current_page - 1) * per_page;
+    let start_count = 0;
+
     return (
       <React.Fragment>
         <h5>Posts</h5>
@@ -52,38 +65,23 @@ class List extends Component {
             </thead>
 
             <tbody>
-              {this.state.posts.map(post => <Item key={post.id} post={post} />)}
+              {this.state.posts.map((post, index) => {
+                if (index >= start_offset && start_count < per_page) {
+                  start_count++;
+                  return <Item key={post.id} post={post} />;
+                }
+              })}
             </tbody>
           </Table>
+          <Pagination
+            innerClass="pagination center-align"
+            activePage={this.state.activePage}
+            itemsCountPerPage={10}
+            totalItemsCount={this.state.posts.length}
+            pageRangeDisplayed={10}
+            onChange={this.handlePageChange}
+          />
         </Row>
-
-        <ul className="pagination center-align">
-          <li className="disabled">
-            <a href="#!">
-              <i className="material-icons">chevron_left</i>
-            </a>
-          </li>
-          <li className="active">
-            <a href="#!">1</a>
-          </li>
-          <li className="waves-effect">
-            <a href="#!">2</a>
-          </li>
-          <li className="waves-effect">
-            <a href="#!">3</a>
-          </li>
-          <li className="waves-effect">
-            <a href="#!">4</a>
-          </li>
-          <li className="waves-effect">
-            <a href="#!">5</a>
-          </li>
-          <li className="waves-effect">
-            <a href="#!">
-              <i className="material-icons">chevron_right</i>
-            </a>
-          </li>
-        </ul>
       </React.Fragment>
     );
   }
