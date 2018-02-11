@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Pagination from "react-js-pagination";
 import { Row, Table, Icon } from "react-materialize";
-import logo from "../../logo.svg";
 import { getPosts } from "../actions/UserLogin";
 import Filter from "../post/Filter";
 import Item from "../post/Item";

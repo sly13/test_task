@@ -7,24 +7,13 @@ import { Route, Switch, Link } from "react-router-dom";
 import NotFound from "./components/NotFound";
 import { Navbar } from "react-materialize";
 import Info from "./components/post/Info";
+import logo from "./logo.png";
 
 class App extends Component {
   render() {
-    let logo = (
-      <object
-        id="front-page-logo"
-        className="responsive-img"
-        width="170px"
-        type="image/svg+xml"
-        data="https://demo.rocketico.io/static/media/RocketDAO.51a0a43b.svg"
-      >
-        Your browser does not support SVG.
-      </object>
-    );
-
     return (
       <React.Fragment>
-        <Navbar brand={logo} right>
+        <Navbar brand={<img id="front-page-logo" src={logo} />} right>
           {localStorage.authToken ? <Link to="/logout">Logout</Link> : ""}
         </Navbar>
 
