@@ -7,9 +7,15 @@ import createHistory from "history/createBrowserHistory";
 import registerServiceWorker from "./registerServiceWorker";
 
 const history = createHistory();
+const auth = localStorage.authToken;
 
-if (localStorage.authToken) {
-  console.log("auth");
+if (
+  auth &&
+  (history.location.pathname !== "/" || history.location.pathname !== "/login")
+) {
+  history.push("/list");
+} else {
+  history.push("/login");
 }
 
 ReactDOM.render(

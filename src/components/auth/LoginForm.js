@@ -53,7 +53,7 @@ class LoginForm extends Component {
 
     return (
       <React.Fragment>
-        <h1>Login Form</h1>
+        <h5 className="center-align">Authorization</h5>
 
         <Row>
           <form onSubmit={this.handleSubmit}>
@@ -90,7 +90,7 @@ class LoginForm extends Component {
               <Error text={hasErrors.password} for="password" />
             )} */}
 
-            <Row>
+            <Row className="center-align">
               <Button type="submit" waves="light">
                 Submit<Icon left>insert_emoticon</Icon>
               </Button>

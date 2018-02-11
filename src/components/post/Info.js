@@ -27,7 +27,7 @@ class Info extends Component {
     return (
       <React.Fragment>
         <div>
-          <h5 class="center-align">About post with id={id}</h5>
+          <h5 className="center-align">About post with id={id}</h5>
         </div>
 
         <div className="row ">

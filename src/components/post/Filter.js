@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { getUsers, getUserPosts, getPosts } from "../actions/UserLogin";
-import { Row, Table, Navbar, NavItem, Icon, Input } from "react-materialize";
+import { Row, Input } from "react-materialize";
 
 class Filter extends Component {
   constructor(props) {
@@ -15,12 +15,10 @@ class Filter extends Component {
   componentDidMount() {
     getUsers()
       .then(res => {
-        console.log("res", res);
         this.setState({ users: res.data });
       })
       .catch(error => {
-        console.error("error", error.response.data.error);
-        this.setState({ errors: error.response.data.error });
+        console.error("error", error);
       });
   }
 
@@ -49,7 +47,6 @@ class Filter extends Component {
         })
         .catch(error => {
           console.error("error", error);
-          this.setState({ errors: error.response.data.error });
         });
     }
   };
@@ -58,15 +55,15 @@ class Filter extends Component {
     const { selectedUserId } = this.state;
     const filterText = event.target.value;
 
-    if (filterText.length >= 3 || filterText.length == 0) {
+    if (filterText.length >= 3 || filterText.length === 0) {
       this.setState({
         filterText
       });
 
-      {
-        selectedUserId == "all"
-          ? this.fetchAllPosts(filterText)
-          : this.fetchUserPosts(selectedUserId, filterText);
+      if (selectedUserId === "all") {
+        this.fetchAllPosts(filterText);
+      } else {
+        this.fetchUserPosts(selectedUserId, filterText);
       }
     }
   };
@@ -87,18 +84,20 @@ class Filter extends Component {
       })
       .catch(error => {
         console.error("error", error);
-        this.setState({ errors: error.response.data.error });
       });
+  };
+
+  changePerPageCount = ({ target: { value } }) => {
+    this.props.updatePerPageCount(value);
   };
 
   render() {
     return (
       <Row>
         <Input
-          s={6}
+          s={5}
           type="select"
           icon="account_circle"
-          defaultValue="2"
           onChange={this.filterListByUserId}
         >
           <option value="all">All user's posts</option>
@@ -110,12 +109,18 @@ class Filter extends Component {
         </Input>
 
         <Input
-          s={6}
+          s={5}
           type="text"
           placeholder="Search"
           onChange={this.filterListByText}
           autoComplete="off"
         />
+
+        <Input s={2} type="select" onChange={this.changePerPageCount}>
+          <option value="5">5</option>
+          <option value="10">10</option>
+          <option value="15">15</option>
+        </Input>
       </Row>
     );
   }
