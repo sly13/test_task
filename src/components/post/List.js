@@ -6,19 +6,12 @@ import Filter from "../post/Filter";
 import Item from "../post/Item";
 
 class List extends Component {
-  constructor() {
-    super();
-    this.state = {
-      posts: [],
-      activePage: 1,
-      currentPage: 1,
-      perPage: 10,
-      isLoading: false
-    };
-  }
-
-  handlePageChange = pageNumber => {
-    this.setState({ activePage: pageNumber, currentPage: pageNumber });
+  state = {
+    posts: [],
+    activePage: 1,
+    currentPage: 1,
+    perPage: 10,
+    isLoading: false
   };
 
   componentWillMount() {
@@ -47,6 +40,10 @@ class List extends Component {
     this.setState({
       perPage: count
     });
+  };
+
+  handlePageChange = pageNumber => {
+    this.setState({ activePage: pageNumber, currentPage: pageNumber });
   };
 
   render() {

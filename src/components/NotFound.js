@@ -1,8 +1,11 @@
 import React from "react";
+import { Icon } from "react-materialize";
 
 const NotFound = () => (
-  <div>
-    404 <br /> Page not found
+  <div className="center-align">
+    <h5>
+      404 <br /> Page not found <Icon> mood_bad </Icon>
+    </h5>
   </div>
 );
 

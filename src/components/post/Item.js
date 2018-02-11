@@ -8,7 +8,6 @@ const Item = ({ post: { id, title } }) => (
     <td>{title}</td>
     <td>
       <Link to={`/list/${id}`}>
-        {" "}
         <Icon>send</Icon>
       </Link>
     </td>

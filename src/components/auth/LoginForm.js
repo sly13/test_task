@@ -1,10 +1,8 @@
 import React, { Component } from "react";
 import { withRouter } from "react-router-dom";
-import Error from "../ui/Error";
 import { Row, Input, Icon, Button } from "react-materialize";
 
 class LoginForm extends Component {
-  // анатации
   state = {
     hasErrors: false,
     user: {
@@ -20,9 +18,6 @@ class LoginForm extends Component {
     this.setState({
       hasErrors: errors
     });
-
-    //console.log("login:", e.target.login.value);
-    //console.log("password:", e.target.password.value);
 
     if (e.target.login.value === "test" && e.target.password.value === "test") {
       localStorage.setItem("authToken", true);
@@ -53,7 +48,7 @@ class LoginForm extends Component {
   }
 
   render() {
-    const { hasErrors, user: { login, password } } = this.state;
+    const { user: { login, password } } = this.state;
 
     return (
       <React.Fragment>
@@ -68,13 +63,10 @@ class LoginForm extends Component {
               onChange={this.handleUpdate}
               label="Login"
               validate
-              //required="required"
               autoComplete="off"
             >
               <Icon>account_circle</Icon>
             </Input>
-
-            {/* {hasErrors.login && <Error text={hasErrors.login} />} */}
 
             <Input
               id="password"
@@ -84,15 +76,10 @@ class LoginForm extends Component {
               s={6}
               label="Password"
               className="validate"
-              //required="required"
               autoComplete="off"
             >
               <Icon>lock_outline</Icon>
             </Input>
-
-            {/* {hasErrors.password && (
-              <Error text={hasErrors.password} for="password" />
-            )} */}
 
             <Row>
               <div className="center-align error">

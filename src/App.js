@@ -13,7 +13,10 @@ class App extends Component {
   render() {
     return (
       <React.Fragment>
-        <Navbar brand={<img id="front-page-logo" src={logo} />} right>
+        <Navbar
+          brand={<img id="front-page-logo" src={logo} alt="logo" />}
+          right
+        >
           {localStorage.authToken ? <Link to="/logout">Logout</Link> : ""}
         </Navbar>
 
