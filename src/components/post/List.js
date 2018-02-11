@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Pagination from "react-js-pagination";
-import { Row, Table, Icon } from "react-materialize";
+import { Row, Table, Icon, Col, ProgressBar } from "react-materialize";
 import { getPosts } from "../actions/UserLogin";
 import Filter from "../post/Filter";
 import Item from "../post/Item";
@@ -12,7 +12,8 @@ class List extends Component {
       posts: [],
       activePage: 1,
       currentPage: 1,
-      perPage: 10
+      perPage: 10,
+      isLoading: false
     };
   }
 
@@ -27,7 +28,7 @@ class List extends Component {
   fetchData() {
     getPosts()
       .then(res => {
-        this.setState({ posts: res.data });
+        this.setState({ posts: res.data, isLoading: true });
       })
       .catch(error => {
         console.error("error", error.response.data.error);
@@ -63,45 +64,52 @@ class List extends Component {
           updatePerPageCount={this.updatePerPageCount}
         />
 
-        <Row>
-          {posts.length > 0 ? (
-            <React.Fragment>
-              <Table className="highlight">
-                <thead>
-                  <tr>
-                    <th data-field="id">Id</th>
-                    <th data-field="name">Title</th>
-                  </tr>
-                </thead>
+        {this.state.isLoading ? (
+          <Row>
+            {posts.length > 0 ? (
+              <React.Fragment>
+                <Table className="highlight">
+                  <thead>
+                    <tr>
+                      <th data-field="id">Id</th>
+                      <th data-field="name">Title</th>
+                    </tr>
+                  </thead>
 
-                <tbody>
-                  {posts.map((post, index) => {
-                    if (index >= start_offset && start_count < perPage) {
-                      start_count++;
-                      return <Item key={post.id} post={post} />;
-                    }
-                  })}
-                </tbody>
-              </Table>
+                  <tbody>
+                    {posts.map((post, index) => {
+                      if (index >= start_offset && start_count < perPage) {
+                        start_count++;
+                        return <Item key={post.id} post={post} />;
+                      }
+                    })}
+                  </tbody>
+                </Table>
 
-              <Pagination
-                innerClass="pagination center-align"
-                activePage={activePage}
-                itemsCountPerPage={perPage}
-                totalItemsCount={posts.length}
-                pageRangeDisplayed={pages}
-                onChange={this.handlePageChange}
-              />
-            </React.Fragment>
-          ) : (
-            <div className="center-align">
-              {" "}
-              <h5>
-                Nothing found <Icon> mood_bad </Icon>
-              </h5>
-            </div>
-          )}
-        </Row>
+                <Pagination
+                  innerClass="pagination center-align"
+                  activePage={activePage}
+                  itemsCountPerPage={perPage}
+                  totalItemsCount={posts.length}
+                  pageRangeDisplayed={pages}
+                  onChange={this.handlePageChange}
+                />
+              </React.Fragment>
+            ) : (
+              <div className="center-align">
+                <h5>
+                  Nothing found <Icon> mood_bad </Icon>
+                </h5>
+              </div>
+            )}
+          </Row>
+        ) : (
+          <Row>
+            <Col s={12}>
+              <ProgressBar />
+            </Col>
+          </Row>
+        )}
       </React.Fragment>
     );
   }
