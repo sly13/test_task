@@ -32,7 +32,8 @@ class List extends Component {
   updatePostList = posts => {
     this.setState({
       posts,
-      currentPage: 1
+      currentPage: 1,
+      activePage: 1
     });
   };
 
